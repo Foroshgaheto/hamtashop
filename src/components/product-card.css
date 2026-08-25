@@ -1,0 +1,170 @@
+@layer components {
+  .hamta-product-card {
+    @apply relative flex flex-col bg-white overflow-hidden h-full;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .hamta-product-card:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  .hamta-product-card__media {
+    @apply relative aspect-square overflow-hidden bg-gray-50;
+  }
+
+  .hamta-product-card__image-link {
+    @apply block w-full h-full;
+  }
+
+  .hamta-product-card__image {
+    @apply w-full h-full object-cover;
+    transition: transform var(--transition-base);
+  }
+
+  .hamta-product-card:hover .hamta-product-card__image {
+    transform: scale(1.03);
+  }
+
+  .hamta-product-card__discount {
+    @apply absolute top-2 right-2 z-10 text-xs font-bold text-white px-2 py-1;
+    background-color: var(--color-danger);
+    border-radius: var(--radius-button);
+  }
+
+  .hamta-product-card__wishlist {
+    @apply absolute top-2 left-2 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-gray-500 border border-gray-100;
+    transition: color var(--transition-base), background-color var(--transition-base);
+  }
+
+  .hamta-product-card__wishlist:hover,
+  .hamta-product-card__wishlist.is-active {
+    color: var(--color-primary);
+  }
+
+  .hamta-product-card__wishlist.is-active svg {
+    fill: currentColor;
+  }
+
+  .hamta-product-card__badges {
+    @apply absolute bottom-2 right-2 left-2 z-10 flex flex-wrap gap-1 pointer-events-none list-none m-0 p-0;
+  }
+
+  .hamta-product-card__badge {
+    @apply inline-flex items-center gap-1 text-[11px] text-white px-2 py-0.5 max-w-full truncate;
+    border-radius: var(--radius-button);
+  }
+
+  .hamta-product-card__badge-icon {
+    @apply inline-flex w-3.5 h-3.5 shrink-0;
+  }
+
+  .hamta-product-card__badge-icon svg,
+  .hamta-product-card__badge-icon img {
+    @apply w-full h-full;
+  }
+
+  .hamta-product-card__body {
+    @apply flex flex-col flex-1 gap-2 p-3 sm:p-4;
+  }
+
+  .hamta-product-card__title {
+    @apply text-sm sm:text-base font-semibold leading-snug m-0 line-clamp-2;
+  }
+
+  .hamta-product-card__title a {
+    @apply text-[var(--color-text)] no-underline;
+  }
+
+  .hamta-product-card__title a:hover {
+    color: var(--color-primary);
+  }
+
+  .hamta-product-card__rating {
+    @apply flex items-center gap-0.5 text-[var(--color-warning)];
+  }
+
+  .hamta-product-card__star--empty {
+    @apply text-gray-300;
+  }
+
+  .hamta-product-card__rating-count {
+    @apply text-xs text-[var(--color-muted)] mr-1;
+  }
+
+  .hamta-product-card__stock {
+    @apply text-xs text-[var(--color-success)] m-0;
+  }
+
+  .hamta-product-card__stock.is-out {
+    color: var(--color-danger);
+  }
+
+  .hamta-product-card__price {
+    @apply flex flex-wrap items-baseline gap-2;
+  }
+
+  .hamta-product-card__price-regular {
+    @apply text-xs text-[var(--color-muted)] line-through;
+  }
+
+  .hamta-product-card__price-current {
+    @apply text-sm sm:text-base font-bold text-[var(--color-text)];
+  }
+
+  .hamta-product-card__price-current del {
+    @apply hidden;
+  }
+
+  .hamta-product-card__timer {
+    @apply flex items-center justify-between gap-2 text-xs px-2 py-1.5 rounded-button;
+    background: color-mix(in srgb, var(--color-primary) 10%, white);
+    color: var(--color-primary-dark);
+  }
+
+  .hamta-product-card__timer-digits {
+    @apply font-bold tracking-wide tabular-nums;
+  }
+
+  .hamta-product-card__swatches {
+    @apply flex flex-wrap gap-1.5 list-none m-0 p-0;
+  }
+
+  .hamta-product-card__swatch {
+    @apply w-5 h-5 rounded-full border-2 border-white shadow-sm ring-1 ring-gray-200 p-0 cursor-pointer;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .hamta-product-card__swatch.is-active,
+  .hamta-product-card__swatch:hover {
+    @apply ring-2;
+    ring-color: var(--color-primary);
+    transform: scale(1.08);
+  }
+
+  .hamta-product-card__cta {
+    @apply mt-auto pt-1;
+  }
+
+  .hamta-product-card__btn {
+    @apply w-full inline-flex items-center justify-center text-center text-sm font-medium text-white px-3 py-2.5 no-underline;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-button);
+    transition: background-color var(--transition-base);
+  }
+
+  .hamta-product-card__btn:hover {
+    background-color: var(--color-primary-dark);
+    color: #fff;
+  }
+
+  .hamta-product-card-grid {
+    @apply grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 list-none p-0 m-0;
+  }
+
+  .hamta-product-card-grid > .product,
+  .hamta-product-card-grid > li {
+    @apply m-0 p-0 w-auto max-w-none float-none;
+  }
+}

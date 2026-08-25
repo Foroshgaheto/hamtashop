@@ -1,5 +1,6 @@
 @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
 @import './tokens.css';
+@import './components/product-card.css';
 
 @tailwind base;
 @tailwind components;
@@ -19,6 +20,10 @@
   h5,
   h6 {
     font-family: var(--font-heading);
+  }
+
+  [x-cloak] {
+    display: none !important;
   }
 }
 

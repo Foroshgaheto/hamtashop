@@ -21,6 +21,8 @@ require_once HAMTA_THEME_DIR . '/inc/cache/page-cache.php';
 require_once HAMTA_THEME_DIR . '/inc/cache/cache-exclusions.php';
 require_once HAMTA_THEME_DIR . '/inc/license/license-manager.php';
 require_once HAMTA_THEME_DIR . '/inc/badges/product-badge-taxonomy.php';
+require_once HAMTA_THEME_DIR . '/inc/product-card.php';
+require_once HAMTA_THEME_DIR . '/inc/attribute-color-meta.php';
 
 /**
  * Enqueue front-end assets (Vite build + Alpine.js).
