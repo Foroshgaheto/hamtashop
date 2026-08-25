@@ -1,0 +1,17 @@
+:root {
+  --color-primary: #E11D48;
+  --color-primary-dark: #BE123C;
+  --color-secondary: #1E293B;
+  --color-bg: #FAFAFA;
+  --color-text: #1F2937;
+  --color-muted: #6B7280;
+  --color-success: #16A34A;
+  --color-warning: #F59E0B;
+  --color-danger: #DC2626;
+  --font-heading: 'Vazirmatn', sans-serif;
+  --font-body: 'Vazirmatn', sans-serif;
+  --radius-card: 8px;
+  --radius-button: 6px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --transition-base: 150ms ease;
+}

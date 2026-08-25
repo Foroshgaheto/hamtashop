@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build / env
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# WordPress local noise (if theme is copied into a full WP tree)
+wp-config.php
+uploads/
+
+# Vite
+assets/dist/.vite/

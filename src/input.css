@@ -1,0 +1,42 @@
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .hamta-btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white transition;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-button);
+    transition: var(--transition-base);
+  }
+
+  .hamta-btn:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  .hamta-card {
+    @apply bg-white overflow-hidden;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+}
