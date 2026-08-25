@@ -72,15 +72,20 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 	$rating = (float) $product->get_average_rating();
 	$count  = (int) $product->get_rating_count();
 
+	$min_price = $is_variable ? (float) $product->get_variation_price( 'min', true ) : (float) $product->get_price();
+	$price_amount = hamta_persian_digits( number_format( $min_price, 0, '.', ',' ) );
+
 	$data = array(
 		'id'            => $product_id,
 		'title'         => $product->get_name(),
 		'permalink'     => get_permalink( $product_id ),
 		'image'         => array(
-			'url' => wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ?: wc_placeholder_img_src( 'woocommerce_thumbnail' ),
+			'url' => wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_single' ) ?: ( wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ?: wc_placeholder_img_src( 'woocommerce_thumbnail' ) ),
 			'alt' => $product->get_name(),
 		),
 		'price_html'    => hamta_format_price_html( $product->get_price_html() ),
+		'price_amount'  => $price_amount,
+		'price_from'    => $is_variable || $is_on_sale,
 		'regular_html'  => $is_on_sale ? hamta_format_price_html( wc_price( $regular ) ) : '',
 		'is_on_sale'    => $is_on_sale,
 		'discount_pct'  => $discount_pct,
@@ -91,6 +96,7 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 		'rating_count'  => $count,
 		'badges'        => hamta_get_product_badges( $product_id ),
 		'colors'        => hamta_get_product_color_swatches( $product ),
+		'meta_rows'     => hamta_get_product_card_meta_rows( $product ),
 		'cta'           => array(
 			'type'  => $can_ajax ? 'add_to_cart' : 'view',
 			'label' => $can_ajax ? __( 'افزودن به سبد خرید', 'hamta-base' ) : __( 'مشاهده محصول', 'hamta-base' ),
@@ -99,6 +105,60 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 	);
 
 	return array_replace_recursive( $data, $args );
+}
+
+/**
+ * Meta rows for card (brand + country of origin).
+ *
+ * @param WC_Product $product Product.
+ * @return array<int, array{label:string,value:string}>
+ */
+function hamta_get_product_card_meta_rows( $product ) {
+	$rows = array();
+
+	$brand = hamta_get_product_attr_label( $product, array( 'pa_brand', 'brand', 'product_brand' ) );
+	if ( $brand ) {
+		$rows[] = array(
+			'label' => __( 'برند محصول', 'hamta-base' ),
+			'value' => $brand,
+		);
+	}
+
+	$country = hamta_get_product_attr_label( $product, array( 'pa_country', 'pa_made_in', 'country', 'made_in' ) );
+	if ( $country ) {
+		$rows[] = array(
+			'label' => __( 'کشورهای سازنده', 'hamta-base' ),
+			'value' => $country,
+		);
+	}
+
+	return $rows;
+}
+
+/**
+ * Resolve a product attribute / taxonomy display value.
+ *
+ * @param WC_Product $product Product.
+ * @param array      $keys    Candidate taxonomy/attribute keys.
+ * @return string
+ */
+function hamta_get_product_attr_label( $product, $keys ) {
+	foreach ( $keys as $key ) {
+		if ( 'product_brand' === $key && taxonomy_exists( 'product_brand' ) ) {
+			$terms = get_the_terms( $product->get_id(), 'product_brand' );
+			if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+				return $terms[0]->name;
+			}
+			continue;
+		}
+
+		$value = $product->get_attribute( $key );
+		if ( $value ) {
+			return $value;
+		}
+	}
+
+	return '';
 }
 
 /**
@@ -260,5 +320,14 @@ function hamta_icon_star( $filled = true ) {
  * @return string
  */
 function hamta_icon_heart() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-6.7-4.4-9.3-8C.6 9.8 1.3 5.8 4.6 4.2c2-.9 4.3-.3 5.7 1.3C11.7 3.9 14 3.3 16 4.2c3.3 1.6 4 5.6 1.9 8.8C18.7 16.6 12 21 12 21z"/></svg>';
+	return '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-6.7-4.4-9.3-8C.6 9.8 1.3 5.8 4.6 4.2c2-.9 4.3-.3 5.7 1.3C11.7 3.9 14 3.3 16 4.2c3.3 1.6 4 5.6 1.9 8.8C18.7 16.6 12 21 12 21z"/></svg>';
+}
+
+/**
+ * Shopping bag + plus icon for card CTA.
+ *
+ * @return string
+ */
+function hamta_icon_cart_plus() {
+	return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h15l-1.4 8.4a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.7L5.2 3H3"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/><path d="M12 9v4M10 11h4"/></svg>';
 }

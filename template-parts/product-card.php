@@ -1,9 +1,6 @@
 <?php
 /**
- * Reusable product card template-part.
- *
- * Usage: get_template_part( 'template-parts/product', 'card', array( 'product' => $product ) );
- * Optional: 'data' => array(...) overrides from hamta_get_product_card_data().
+ * Reusable product card template-part (design: image + meta + green price + circular cart).
  *
  * @package Hamta_Base
  */
@@ -72,7 +69,7 @@ $alpine_config = array(
 
 		<?php if ( ! empty( $data['badges'] ) ) : ?>
 			<ul class="hamta-product-card__badges">
-				<?php foreach ( $data['badges'] as $badge ) : ?>
+				<?php foreach ( array_slice( $data['badges'], 0, 2 ) as $badge ) : ?>
 					<li class="hamta-product-card__badge" style="background-color: <?php echo esc_attr( $badge['color'] ); ?>">
 						<?php if ( ! empty( $badge['icon'] ) ) : ?>
 							<span class="hamta-product-card__badge-icon"><?php echo wp_kses_post( $badge['icon'] ); ?></span>
@@ -91,20 +88,16 @@ $alpine_config = array(
 			</a>
 		</h3>
 
-		<?php hamta_render_star_rating( (float) $data['rating'], (int) $data['rating_count'] ); ?>
-
-		<?php if ( ! empty( $data['stock_text'] ) ) : ?>
-			<p class="hamta-product-card__stock <?php echo empty( $data['in_stock'] ) ? 'is-out' : ''; ?>">
-				<?php echo esc_html( $data['stock_text'] ); ?>
-			</p>
+		<?php if ( ! empty( $data['meta_rows'] ) ) : ?>
+			<dl class="hamta-product-card__meta">
+				<?php foreach ( $data['meta_rows'] as $row ) : ?>
+					<div class="hamta-product-card__meta-row">
+						<dt><?php echo esc_html( $row['label'] ); ?></dt>
+						<dd><?php echo esc_html( $row['value'] ); ?></dd>
+					</div>
+				<?php endforeach; ?>
+			</dl>
 		<?php endif; ?>
-
-		<div class="hamta-product-card__price">
-			<?php if ( ! empty( $data['is_on_sale'] ) && ! empty( $data['regular_html'] ) ) : ?>
-				<span class="hamta-product-card__price-regular"><?php echo wp_kses_post( $data['regular_html'] ); ?></span>
-			<?php endif; ?>
-			<span class="hamta-product-card__price-current"><?php echo wp_kses_post( $data['price_html'] ); ?></span>
-		</div>
 
 		<?php if ( $has_timer ) : ?>
 			<div class="hamta-product-card__timer" x-show="timer.visible" x-cloak>
@@ -131,24 +124,37 @@ $alpine_config = array(
 			</ul>
 		<?php endif; ?>
 
-		<div class="hamta-product-card__cta">
+		<div class="hamta-product-card__footer">
 			<?php if ( 'add_to_cart' === $data['cta']['type'] ) : ?>
 				<a
 					href="<?php echo esc_url( $data['cta']['url'] ); ?>"
-					class="hamta-product-card__btn add_to_cart_button ajax_add_to_cart"
+					class="hamta-product-card__cart-btn add_to_cart_button ajax_add_to_cart"
 					data-quantity="1"
 					data-product_id="<?php echo esc_attr( (string) $data['id'] ); ?>"
 					data-product_sku="<?php echo esc_attr( $product ? $product->get_sku() : '' ); ?>"
 					aria-label="<?php echo esc_attr( $data['cta']['label'] ); ?>"
 					rel="nofollow"
 				>
-					<?php echo esc_html( $data['cta']['label'] ); ?>
+					<?php echo hamta_icon_cart_plus(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</a>
 			<?php else : ?>
-				<a class="hamta-product-card__btn" :href="permalink" href="<?php echo esc_url( $data['cta']['url'] ); ?>">
-					<?php echo esc_html( $data['cta']['label'] ); ?>
+				<a
+					class="hamta-product-card__cart-btn"
+					:href="permalink"
+					href="<?php echo esc_url( $data['cta']['url'] ); ?>"
+					aria-label="<?php echo esc_attr( $data['cta']['label'] ); ?>"
+				>
+					<?php echo hamta_icon_cart_plus(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</a>
 			<?php endif; ?>
+
+			<div class="hamta-product-card__price-block">
+				<span class="hamta-product-card__price-label"><?php esc_html_e( 'شروع قیمت از', 'hamta-base' ); ?></span>
+				<div class="hamta-product-card__price-row">
+					<span class="hamta-product-card__price-amount" dir="ltr"><?php echo esc_html( $data['price_amount'] ); ?></span>
+					<span class="hamta-product-card__price-currency"><?php esc_html_e( 'تومان', 'hamta-base' ); ?></span>
+				</div>
+			</div>
 		</div>
 	</div>
 </article>

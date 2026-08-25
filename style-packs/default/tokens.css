@@ -8,10 +8,12 @@
   --color-success: #16A34A;
   --color-warning: #F59E0B;
   --color-danger: #DC2626;
+  --color-card-accent: #22C55E;
+  --color-card-accent-dark: #16A34A;
   --font-heading: 'Vazirmatn', sans-serif;
   --font-body: 'Vazirmatn', sans-serif;
-  --radius-card: 8px;
+  --radius-card: 12px;
   --radius-button: 6px;
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
   --transition-base: 150ms ease;
 }
