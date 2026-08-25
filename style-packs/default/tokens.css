@@ -1,21 +1,20 @@
 :root {
   --color-primary: #DC0029;
   --color-primary-dark: #B80022;
-  --color-secondary: #283039;
+  --color-secondary: #031955;
   --color-bg: #F3F5F9;
-  --color-text: #283039;
-  --color-muted: #9CA3AF;
+  --color-text: #031955;
+  --color-muted: #6B7280;
   --color-success: #16A34A;
-  --color-warning: #F59E0B;
+  --color-warning: #DB9521;
   --color-danger: #DC0029;
   --color-card: #FFFFFF;
   --color-card-accent: #DC0029;
   --color-card-accent-dark: #B80022;
   --font-heading: 'Vazirmatn', sans-serif;
   --font-body: 'Vazirmatn', sans-serif;
-  --radius-card: 20px;
-  --radius-card-outer: 20px;
-  --radius-button: 6px;
-  --shadow-card: 0 8px 24px rgba(210, 214, 225, 0.35);
+  --radius-card: 19px;
+  --radius-button: 8px;
+  --shadow-card: 0 6px 10px rgba(178, 189, 206, 0.2);
   --transition-base: 150ms ease;
 }

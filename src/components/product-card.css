@@ -1,76 +1,111 @@
 @layer components {
   .hamta-product-card {
     @apply relative flex flex-col h-full overflow-hidden;
-    background: var(--color-card, #FFFFFF);
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(210, 214, 225, 0.35);
-    padding: 16px 14px 18px;
+    background: var(--color-card, #fff);
+    border-radius: var(--radius-card, 19px);
+    box-shadow: var(--shadow-card);
+    padding: 14px 14px 16px;
   }
 
-  .hamta-product-card__panel {
-    @apply relative flex flex-col flex-1 min-h-0;
+  .hamta-product-card__wishlist {
+    @apply absolute z-20 inline-flex items-center justify-center text-gray-400;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: color var(--transition-base);
+  }
+
+  .hamta-product-card__wishlist:hover,
+  .hamta-product-card__wishlist.is-active {
+    color: var(--color-card-accent);
+  }
+
+  .hamta-product-card__wishlist.is-active svg {
+    fill: currentColor;
+  }
+
+  .hamta-product-card__timer {
+    @apply absolute z-20 inline-flex items-center justify-center font-semibold text-white tabular-nums;
+    top: 12px;
+    left: 12px;
+    min-width: 96px;
+    height: 26px;
+    padding: 0 10px;
+    font-size: 12px;
+    background: var(--color-card-accent);
+    border-radius: 8px;
+  }
+
+  .hamta-product-card__labels {
+    @apply absolute z-20 flex flex-col gap-1 list-none m-0 p-0;
+    top: 12px;
+    left: 12px;
+  }
+
+  .hamta-product-card__label {
+    @apply text-white font-bold;
+    font-size: 11px;
+    padding: 4px 6px 3px;
+    border-radius: 7px;
+    line-height: 1.2;
   }
 
   .hamta-product-card__media {
-    @apply relative;
-    padding: 8px 20px 4px;
+    @apply relative flex items-center justify-center;
+    min-height: 180px;
+    padding: 28px 24px 8px;
   }
 
   .hamta-product-card__image-link {
     @apply flex items-center justify-center w-full;
-    height: 200px;
   }
 
   .hamta-product-card__image {
-    @apply max-w-full max-h-full object-contain;
-    width: auto;
-    height: 190px;
+    @apply object-contain max-w-full;
+    width: 160px;
+    height: 160px;
     transition: transform var(--transition-base);
   }
 
   .hamta-product-card:hover .hamta-product-card__image {
-    transform: scale(1.02);
+    transform: scale(1.03);
   }
 
-  .hamta-product-card__discount,
-  .hamta-product-card__wishlist {
-    display: none;
-  }
-
-  /* Vertical color bars — top right */
   .hamta-product-card__swatches {
-    @apply absolute z-10 flex flex-col list-none m-0 p-0;
-    top: 4px;
-    right: 2px;
-    gap: 5px;
+    @apply absolute flex flex-col gap-1.5 list-none m-0 p-0 z-10;
+    top: 50%;
+    left: 6px;
+    transform: translateY(-50%);
   }
 
   .hamta-product-card__swatch {
-    display: block;
-    width: 4px;
-    height: 18px;
+    width: 8px;
+    height: 8px;
     padding: 0;
     border: 0;
-    border-radius: 20px;
+    border-radius: 50%;
     cursor: pointer;
-    transition: width var(--transition-base), transform var(--transition-base);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    transition: transform var(--transition-base);
   }
 
   .hamta-product-card__swatch.is-active,
   .hamta-product-card__swatch:hover {
-    width: 6px;
-  }
-
-  .hamta-product-card__body {
-    @apply flex flex-col flex-1 gap-4 px-1 pt-2;
+    transform: scale(1.25);
   }
 
   .hamta-product-card__title {
-    @apply m-0 text-center font-bold line-clamp-2;
-    color: #283039;
+    @apply m-0 font-bold text-right line-clamp-2;
+    color: var(--color-text);
     font-size: 15px;
-    line-height: 1.7;
-    padding: 0 4px;
+    line-height: 1.6;
+    min-height: 2.8em;
+    padding: 0 2px;
   }
 
   .hamta-product-card__title a {
@@ -82,71 +117,101 @@
     color: var(--color-card-accent);
   }
 
-  .hamta-product-card__timer {
-    @apply flex items-center justify-between gap-2 text-[11px] px-2 py-1.5 mx-1;
-    background: color-mix(in srgb, var(--color-card-accent) 8%, white);
-    color: var(--color-card-accent-dark);
-    border-radius: 8px;
+  .hamta-product-card__detail {
+    @apply flex items-center justify-between gap-2 mt-2 mb-3;
+    font-size: 13px;
   }
 
-  .hamta-product-card__timer-digits {
-    @apply font-bold tracking-wide tabular-nums;
+  .hamta-product-card__stock {
+    @apply flex items-center gap-1 font-semibold m-0;
+    color: #122763;
   }
 
-  .hamta-product-card__footer {
-    @apply flex items-end justify-between gap-3 mt-auto px-1;
-    flex-direction: row;
-    direction: ltr;
+  .hamta-product-card__stock-qty {
+    font-weight: 700;
   }
 
-  /* Light circle + dark bag icon (not filled red) */
-  .hamta-product-card__cart-btn {
-    @apply inline-flex items-center justify-center shrink-0 no-underline box-border;
-    width: 48px;
-    height: 48px;
-    border-radius: 999px;
-    background: #E8ECF2;
-    border: none;
-    color: #4B5563;
-    transition: background-color var(--transition-base), color var(--transition-base), transform var(--transition-base);
+  .hamta-product-card__stock--spacer {
+    min-height: 1em;
   }
 
-  .hamta-product-card__cart-btn:hover {
-    background: #DDE3EC;
-    color: #283039;
-    transform: scale(1.03);
+  .hamta-product-card__rating {
+    @apply inline-flex items-center gap-1;
+    color: var(--color-text);
   }
 
-  .hamta-product-card__price-block {
-    @apply flex flex-col items-end text-right min-w-0 gap-0.5;
-    direction: rtl;
+  .hamta-product-card__rating svg {
+    color: var(--color-warning);
+    fill: var(--color-warning);
+  }
+
+  .hamta-product-card__actions {
+    @apply flex items-end justify-between gap-2 mt-auto;
+  }
+
+  .hamta-product-card__cta {
+    @apply shrink-0;
+  }
+
+  .hamta-product-card__btn {
+    @apply inline-flex items-center justify-center text-white font-semibold no-underline whitespace-nowrap;
+    background: var(--color-card-accent);
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 10px 12px;
+    min-height: 40px;
+    transition: background-color var(--transition-base);
+  }
+
+  .hamta-product-card__btn:hover {
+    background: var(--color-card-accent-dark);
+    color: #fff;
+  }
+
+  .hamta-product-card__price {
+    @apply flex flex-col items-end text-right gap-0.5 min-w-0;
   }
 
   .hamta-product-card__price-regular {
-    @apply tabular-nums;
-    font-size: 13px;
-    line-height: 1.4;
-    font-weight: 400;
+    @apply tabular-nums line-through;
+    font-size: 12px;
     color: #9CA3AF;
-    text-decoration: line-through;
   }
 
-  .hamta-product-card__price-row {
-    @apply flex items-baseline gap-1;
+  .hamta-product-card__price-current-row {
+    @apply flex items-center gap-1.5;
+  }
+
+  .hamta-product-card__discount {
+    @apply inline-flex items-center justify-center text-white font-semibold;
+    background: var(--color-card-accent);
+    border-radius: 30px;
+    font-size: 11px;
+    min-width: 28px;
+    height: 20px;
+    padding: 0 6px;
+  }
+
+  .hamta-product-card__price-current {
+    @apply inline-flex items-baseline gap-1 font-bold;
+    color: var(--color-text);
+    font-size: 14px;
+  }
+
+  .hamta-product-card__price-from {
+    font-size: 12px;
+    font-weight: 600;
   }
 
   .hamta-product-card__price-amount {
-    @apply tabular-nums font-semibold;
-    font-size: 18px;
-    line-height: 1.3;
-    color: #DC0029;
+    @apply tabular-nums;
+    font-size: 15px;
   }
 
   .hamta-product-card__price-currency {
-    font-size: 12px;
-    line-height: 1.3;
-    font-weight: 400;
-    color: #DC0029;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-muted);
   }
 
   .hamta-product-card-grid {

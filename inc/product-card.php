@@ -73,96 +73,54 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 	$count  = (int) $product->get_rating_count();
 
 	$min_price = $is_variable ? (float) $product->get_variation_price( 'min', true ) : (float) $product->get_price();
-	$price_amount = hamta_persian_digits( number_format( $min_price, 0, '.', ',' ) );
-	$regular_amount = ( $is_on_sale && $regular > 0 )
-		? hamta_persian_digits( number_format( $regular, 0, '.', ',' ) )
-		: '';
+	$price_amount = hamta_persian_digits( number_format( max( 0, $min_price ), 0, '.', ',' ) );
+	$regular_for_amount = $is_variable ? (float) $product->get_variation_regular_price( 'min', true ) : $regular;
+	$regular_amount = ( $is_on_sale && $regular_for_amount > $min_price )
+		? hamta_persian_digits( number_format( $regular_for_amount, 0, '.', ',' ) )
+		: ( ( $is_variable && $regular_for_amount > $min_price )
+			? hamta_persian_digits( number_format( $regular_for_amount, 0, '.', ',' ) )
+			: '' );
+
+	// Variable on sale: compute discount from min regular vs min price when possible.
+	if ( $is_variable && $regular_for_amount > $min_price && $regular_for_amount > 0 ) {
+		$discount_pct = (int) round( ( ( $regular_for_amount - $min_price ) / $regular_for_amount ) * 100 );
+		$is_on_sale   = true;
+		if ( ! $timer_end ) {
+			$sale_to = $product->get_date_on_sale_to();
+			$timer_end = $sale_to ? $sale_to->getTimestamp() : 0;
+		}
+	}
 
 	$data = array(
-		'id'            => $product_id,
-		'title'         => $product->get_name(),
-		'permalink'     => get_permalink( $product_id ),
-		'image'         => array(
-			'url' => wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_single' ) ?: ( wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ?: wc_placeholder_img_src( 'woocommerce_thumbnail' ) ),
+		'id'             => $product_id,
+		'title'          => $product->get_name(),
+		'permalink'      => get_permalink( $product_id ),
+		'image'          => array(
+			'url' => wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' ) ?: wc_placeholder_img_src( 'woocommerce_thumbnail' ),
 			'alt' => $product->get_name(),
 		),
-		'price_html'    => hamta_format_price_html( $product->get_price_html() ),
-		'price_amount'  => $price_amount,
-		'regular_amount'=> $regular_amount,
-		'price_from'    => $is_variable || $is_on_sale,
-		'regular_html'  => $is_on_sale ? hamta_format_price_html( wc_price( $regular ) ) : '',
-		'is_on_sale'    => $is_on_sale,
-		'discount_pct'  => $discount_pct,
-		'timer_end'     => $timer_end,
-		'stock_text'    => $stock_text,
-		'in_stock'      => $product->is_in_stock(),
-		'rating'        => $rating,
-		'rating_count'  => $count,
-		'badges'        => hamta_get_product_badges( $product_id ),
-		'colors'        => hamta_get_product_color_swatches( $product ),
-		'meta_rows'     => hamta_get_product_card_meta_rows( $product ),
-		'cta'           => array(
+		'price_html'     => hamta_format_price_html( $product->get_price_html() ),
+		'price_amount'   => $price_amount,
+		'regular_amount' => $regular_amount,
+		'price_from'     => $is_variable,
+		'regular_html'   => $regular_amount ? hamta_format_price_html( wc_price( $regular_for_amount ) ) : '',
+		'is_on_sale'     => $is_on_sale || ( $regular_amount && $regular_for_amount > $min_price ),
+		'discount_pct'   => $discount_pct,
+		'timer_end'      => $timer_end,
+		'stock_text'     => $stock_text,
+		'in_stock'       => $product->is_in_stock(),
+		'rating'         => $rating,
+		'rating_count'   => $count,
+		'badges'         => hamta_get_product_badges( $product_id ),
+		'colors'         => hamta_get_product_color_swatches( $product ),
+		'cta'            => array(
 			'type'  => $can_ajax ? 'add_to_cart' : 'view',
-			'label' => $can_ajax ? __( 'افزودن به سبد خرید', 'hamta-base' ) : __( 'مشاهده محصول', 'hamta-base' ),
+			'label' => $can_ajax ? __( 'افزودن به سبد', 'hamta-base' ) : __( 'مشاهده محصول', 'hamta-base' ),
 			'url'   => $can_ajax ? $product->add_to_cart_url() : get_permalink( $product_id ),
 		),
 	);
 
 	return array_replace_recursive( $data, $args );
-}
-
-/**
- * Meta rows for card (brand + country of origin).
- *
- * @param WC_Product $product Product.
- * @return array<int, array{label:string,value:string}>
- */
-function hamta_get_product_card_meta_rows( $product ) {
-	$rows = array();
-
-	$brand = hamta_get_product_attr_label( $product, array( 'pa_brand', 'brand', 'product_brand' ) );
-	if ( $brand ) {
-		$rows[] = array(
-			'label' => __( 'برند محصول', 'hamta-base' ),
-			'value' => $brand,
-		);
-	}
-
-	$country = hamta_get_product_attr_label( $product, array( 'pa_country', 'pa_made_in', 'country', 'made_in' ) );
-	if ( $country ) {
-		$rows[] = array(
-			'label' => __( 'کشورهای سازنده', 'hamta-base' ),
-			'value' => $country,
-		);
-	}
-
-	return $rows;
-}
-
-/**
- * Resolve a product attribute / taxonomy display value.
- *
- * @param WC_Product $product Product.
- * @param array      $keys    Candidate taxonomy/attribute keys.
- * @return string
- */
-function hamta_get_product_attr_label( $product, $keys ) {
-	foreach ( $keys as $key ) {
-		if ( 'product_brand' === $key && taxonomy_exists( 'product_brand' ) ) {
-			$terms = get_the_terms( $product->get_id(), 'product_brand' );
-			if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-				return $terms[0]->name;
-			}
-			continue;
-		}
-
-		$value = $product->get_attribute( $key );
-		if ( $value ) {
-			return $value;
-		}
-	}
-
-	return '';
 }
 
 /**
@@ -324,14 +282,5 @@ function hamta_icon_star( $filled = true ) {
  * @return string
  */
 function hamta_icon_heart() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-6.7-4.4-9.3-8C.6 9.8 1.3 5.8 4.6 4.2c2-.9 4.3-.3 5.7 1.3C11.7 3.9 14 3.3 16 4.2c3.3 1.6 4 5.6 1.9 8.8C18.7 16.6 12 21 12 21z"/></svg>';
-}
-
-/**
- * Shopping bag icon for card CTA (outline, no plus).
- *
- * @return string
- */
-function hamta_icon_cart_plus() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h15l-1.35 9.1a2 2 0 0 1-2 1.7H9.2a2 2 0 0 1-2-1.75L5.4 4H3"/><path d="M9 8V6.5A3 3 0 0 1 15 6.5V8"/><circle cx="9.5" cy="20.2" r="1"/><circle cx="17" cy="20.2" r="1"/></svg>';
+	return '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-6.7-4.4-9.3-8C.6 9.8 1.3 5.8 4.6 4.2c2-.9 4.3-.3 5.7 1.3C11.7 3.9 14 3.3 16 4.2c3.3 1.6 4 5.6 1.9 8.8C18.7 16.6 12 21 12 21z"/></svg>';
 }
