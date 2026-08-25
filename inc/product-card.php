@@ -328,10 +328,10 @@ function hamta_icon_heart() {
 }
 
 /**
- * Shopping bag + plus icon for card CTA.
+ * Shopping bag icon for card CTA (outline, no plus).
  *
  * @return string
  */
 function hamta_icon_cart_plus() {
-	return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h15l-1.4 8.4a2 2 0 0 1-2 1.6H9.2a2 2 0 0 1-2-1.7L5.2 3H3"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/><path d="M12 9v4M10 11h4"/></svg>';
+	return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h15l-1.35 9.1a2 2 0 0 1-2 1.7H9.2a2 2 0 0 1-2-1.75L5.4 4H3"/><path d="M9 8V6.5A3 3 0 0 1 15 6.5V8"/><circle cx="9.5" cy="20.2" r="1"/><circle cx="17" cy="20.2" r="1"/></svg>';
 }
