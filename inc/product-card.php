@@ -74,6 +74,9 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 
 	$min_price = $is_variable ? (float) $product->get_variation_price( 'min', true ) : (float) $product->get_price();
 	$price_amount = hamta_persian_digits( number_format( $min_price, 0, '.', ',' ) );
+	$regular_amount = ( $is_on_sale && $regular > 0 )
+		? hamta_persian_digits( number_format( $regular, 0, '.', ',' ) )
+		: '';
 
 	$data = array(
 		'id'            => $product_id,
@@ -85,6 +88,7 @@ function hamta_get_product_card_data( $product, $args = array() ) {
 		),
 		'price_html'    => hamta_format_price_html( $product->get_price_html() ),
 		'price_amount'  => $price_amount,
+		'regular_amount'=> $regular_amount,
 		'price_from'    => $is_variable || $is_on_sale,
 		'regular_html'  => $is_on_sale ? hamta_format_price_html( wc_price( $regular ) ) : '',
 		'is_on_sale'    => $is_on_sale,

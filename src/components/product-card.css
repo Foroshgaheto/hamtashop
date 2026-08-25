@@ -1,29 +1,31 @@
 @layer components {
   .hamta-product-card {
-    @apply relative flex flex-col bg-white h-full overflow-hidden;
-    border: 1px solid #E5E7EB;
-    border-radius: var(--radius-card);
-    box-shadow: none;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    @apply relative flex flex-col h-full bg-white;
+    border-radius: var(--radius-card-outer);
+    padding: 10px 8px 12px;
   }
 
-  .hamta-product-card:hover {
-    border-color: #D1D5DB;
+  .hamta-product-card__panel {
+    @apply relative flex flex-col flex-1 bg-white overflow-hidden;
+    border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
   }
 
   .hamta-product-card__media {
-    @apply relative overflow-hidden bg-white;
-    aspect-ratio: 1 / 1;
-    padding: 1.25rem 1.25rem 0.5rem;
+    @apply relative bg-white;
+    padding: 1.5rem 1.75rem 0.75rem;
+    min-height: 210px;
   }
 
   .hamta-product-card__image-link {
-    @apply flex items-center justify-center w-full h-full;
+    @apply flex items-center justify-center w-full;
+    height: 191px;
   }
 
   .hamta-product-card__image {
     @apply max-w-full max-h-full object-contain;
+    width: 191px;
+    height: 191px;
     transition: transform var(--transition-base);
   }
 
@@ -31,52 +33,69 @@
     transform: scale(1.02);
   }
 
+  /* Discount pill — top left (Figma) */
   .hamta-product-card__discount {
-    @apply absolute top-3 right-3 z-10 text-[11px] font-bold text-white px-2 py-0.5;
-    background-color: var(--color-danger);
-    border-radius: 999px;
+    @apply absolute z-10 inline-flex items-center justify-center text-white font-semibold;
+    top: 10px;
+    left: 10px;
+    min-width: 36px;
+    height: 20px;
+    padding: 0 8px;
+    font-size: 14px;
+    line-height: 22px;
+    background: var(--color-card-accent);
+    border-radius: 30px;
   }
 
   .hamta-product-card__wishlist {
-    @apply absolute top-3 left-3 z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 text-gray-400 border border-gray-100 opacity-80;
-    transition: color var(--transition-base), opacity var(--transition-base);
+    @apply absolute z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/90 text-gray-400 border border-gray-100;
+    top: 10px;
+    right: 14px;
+    transition: color var(--transition-base);
   }
 
   .hamta-product-card__wishlist:hover,
   .hamta-product-card__wishlist.is-active {
-    color: var(--color-primary);
-    opacity: 1;
+    color: var(--color-card-accent);
   }
 
   .hamta-product-card__wishlist.is-active svg {
     fill: currentColor;
   }
 
-  .hamta-product-card__badges {
-    @apply absolute bottom-2 right-3 left-3 z-10 flex flex-wrap gap-1 pointer-events-none list-none m-0 p-0 justify-end;
+  /* Vertical color bars — top right edge */
+  .hamta-product-card__swatches {
+    @apply absolute z-10 flex flex-col gap-[4px] list-none m-0 p-0;
+    top: 12px;
+    right: 6px;
   }
 
-  .hamta-product-card__badge {
-    @apply inline-flex items-center gap-1 text-[10px] text-white px-2 py-0.5 max-w-full truncate;
-    border-radius: 999px;
+  .hamta-product-card__swatch {
+    display: block;
+    width: 3.2px;
+    height: 17px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform var(--transition-base), width var(--transition-base);
   }
 
-  .hamta-product-card__badge-icon {
-    @apply inline-flex w-3 h-3 shrink-0;
-  }
-
-  .hamta-product-card__badge-icon svg,
-  .hamta-product-card__badge-icon img {
-    @apply w-full h-full;
+  .hamta-product-card__swatch.is-active,
+  .hamta-product-card__swatch:hover {
+    width: 5px;
+    transform: scaleY(1.05);
   }
 
   .hamta-product-card__body {
-    @apply flex flex-col flex-1 gap-3 px-4 pb-4 pt-2;
+    @apply flex flex-col flex-1 gap-3 px-3.5 pb-4 pt-1;
   }
 
   .hamta-product-card__title {
-    @apply text-[15px] sm:text-base font-bold leading-snug m-0 line-clamp-2 text-right;
+    @apply m-0 text-right font-bold line-clamp-2;
     color: var(--color-text);
+    font-size: 16px;
+    line-height: 180%;
   }
 
   .hamta-product-card__title a {
@@ -85,30 +104,12 @@
   }
 
   .hamta-product-card__title a:hover {
-    color: var(--color-card-accent-dark);
-  }
-
-  .hamta-product-card__meta {
-    @apply m-0 p-0 space-y-1.5;
-  }
-
-  .hamta-product-card__meta-row {
-    @apply flex items-center justify-between gap-3 text-[12px] sm:text-[13px];
-    color: #9CA3AF;
-  }
-
-  .hamta-product-card__meta-row dt {
-    @apply m-0 font-normal shrink-0;
-  }
-
-  .hamta-product-card__meta-row dd {
-    @apply m-0 font-medium text-left;
-    color: #6B7280;
+    color: var(--color-card-accent);
   }
 
   .hamta-product-card__timer {
     @apply flex items-center justify-between gap-2 text-[11px] px-2 py-1.5;
-    background: color-mix(in srgb, var(--color-card-accent) 12%, white);
+    background: color-mix(in srgb, var(--color-card-accent) 10%, white);
     color: var(--color-card-accent-dark);
     border-radius: var(--radius-button);
   }
@@ -117,48 +118,41 @@
     @apply font-bold tracking-wide tabular-nums;
   }
 
-  .hamta-product-card__swatches {
-    @apply flex flex-wrap gap-1.5 list-none m-0 p-0;
-  }
-
-  .hamta-product-card__swatch {
-    @apply w-5 h-5 rounded-full border-2 border-white shadow-sm ring-1 ring-gray-200 p-0 cursor-pointer;
-    transition: transform var(--transition-base);
-  }
-
-  .hamta-product-card__swatch.is-active,
-  .hamta-product-card__swatch:hover {
-    @apply ring-2;
-    --tw-ring-color: var(--color-card-accent);
-    transform: scale(1.08);
-  }
-
   .hamta-product-card__footer {
-    @apply flex items-end justify-between gap-3 mt-auto pt-2;
+    @apply flex items-end justify-between gap-3 mt-auto;
+    flex-direction: row; /* Figma: cart left, price right */
+    direction: ltr;
   }
 
   .hamta-product-card__cart-btn {
-    @apply inline-flex items-center justify-center shrink-0 text-white no-underline;
-    width: 48px;
-    height: 48px;
-    border-radius: 999px;
-    background-color: var(--color-card-accent);
+    @apply inline-flex items-center justify-center shrink-0 text-white no-underline box-border;
+    width: 47px;
+    height: 47px;
+    border-radius: 44px;
+    background: var(--color-card-accent);
+    border: 2px solid var(--color-card-accent);
     transition: background-color var(--transition-base), transform var(--transition-base);
   }
 
   .hamta-product-card__cart-btn:hover {
-    background-color: var(--color-card-accent-dark);
+    background: var(--color-card-accent-dark);
+    border-color: var(--color-card-accent-dark);
     color: #fff;
-    transform: scale(1.04);
+    transform: scale(1.03);
   }
 
   .hamta-product-card__price-block {
-    @apply flex flex-col items-end text-right min-w-0;
+    @apply flex flex-col items-end text-right min-w-0 gap-0.5;
+    direction: rtl;
   }
 
-  .hamta-product-card__price-label {
-    @apply text-[11px] mb-0.5;
-    color: #9CA3AF;
+  .hamta-product-card__price-regular {
+    @apply tabular-nums;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #595959;
+    text-decoration: line-through;
   }
 
   .hamta-product-card__price-row {
@@ -166,21 +160,21 @@
   }
 
   .hamta-product-card__price-amount {
-    @apply font-bold tabular-nums leading-none;
+    @apply tabular-nums font-semibold;
+    font-size: 18px;
+    line-height: 28px;
     color: var(--color-card-accent);
-    font-size: clamp(1.15rem, 3.2vw, 1.45rem);
   }
 
   .hamta-product-card__price-currency {
-    @apply text-[10px] font-medium leading-none;
-    color: #9CA3AF;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    letter-spacing: 0.05em;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--color-card-accent);
   }
 
   .hamta-product-card-grid {
-    @apply grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 list-none p-0 m-0;
+    @apply grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 list-none p-0 m-0;
   }
 
   .hamta-product-card-grid > .product,

@@ -1,19 +1,20 @@
 :root {
-  --color-primary: #E11D48;
-  --color-primary-dark: #BE123C;
-  --color-secondary: #1E293B;
-  --color-bg: #FAFAFA;
-  --color-text: #1F2937;
-  --color-muted: #6B7280;
+  --color-primary: #DC0029;
+  --color-primary-dark: #B80022;
+  --color-secondary: #283039;
+  --color-bg: #F3F5F9;
+  --color-text: #283039;
+  --color-muted: #595959;
   --color-success: #16A34A;
   --color-warning: #F59E0B;
-  --color-danger: #DC2626;
-  --color-card-accent: #22C55E;
-  --color-card-accent-dark: #16A34A;
+  --color-danger: #DC0029;
+  --color-card-accent: #DC0029;
+  --color-card-accent-dark: #B80022;
   --font-heading: 'Vazirmatn', sans-serif;
   --font-body: 'Vazirmatn', sans-serif;
   --radius-card: 12px;
+  --radius-card-outer: 15px;
   --radius-button: 6px;
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0px 34px 30px rgba(210, 214, 225, 0.3);
   --transition-base: 150ms ease;
 }
